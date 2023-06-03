@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 # API endpoint
-API_URL = 'http://localhost:5000/predict'
+API_URL = 'http://api:5000/predict'
 
 # Streamlit app
 st.title('Titanic Survival Prediction')

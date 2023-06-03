@@ -3,10 +3,11 @@ services:
   app:
     build:
       context: .
-      target: app
       dockerfile: Dockerfile
+      target: app
     ports:
       - 5000:5000
+
     depends_on:
       - api
   api:
@@ -15,7 +16,7 @@ services:
       target: api
       dockerfile: Dockerfile
     ports:
-      - 5001:5000
+      - 5050:5050
 
   train:
     build:
