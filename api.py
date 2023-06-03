@@ -5,16 +5,17 @@ from sklearn.metrics import accuracy_score
 from flask import Flask, request, jsonify
 
 # Download the Titanic dataset
-url = "data/titanic.csv"
-dataset = pd.read_csv(url) \
+path = "data/titanic.csv"
+target = "Survived"
+dataset = pd.read_csv(path) \
     .drop(["PassengerId", "Name", "Ticket", "Cabin"], axis=1) \
     .dropna()
 
 # Perform data splitting
 X = pd\
     .get_dummies(dataset, columns=["Sex", "Embarked"])\
-    .drop("Survived", axis=1)
-y = dataset["Survived"]
+    .drop(target, axis=1)
+y = dataset[target]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train a Random Forest Classifier
@@ -29,17 +30,27 @@ print("Accuracy:", accuracy)
 # Create a Flask API
 app = Flask(__name__)
 
-# extract all columns and fill them with 0 at predict time
-columns = dataset.columns
+features = list(X.columns)
 
 @app.route('/predict', methods=['POST'])
 def predict():
 
     data = request.json
-    print(data)
-    passenger_data = pd.DataFrame([data])
-    passenger_data = pd.get_dummies(passenger_data, columns=["Sex", "Embarked"])
+    vector = {}
+    for feature in features:
+        if "_" in feature:
+            key, value = feature.split("_")
+            if key in data and value == data[key]:
+                vector[f"{key}_{value}"] = 1
+            else:
+                vector[f"{key}_{value}"] = 0
+        else:
+            if feature in data:
+                vector[feature] = data[feature]
+            else:
+                vector[feature] = 0
 
+    passenger_data = pd.DataFrame([vector])
     prediction = model.predict(passenger_data)
     return jsonify({'prediction': prediction.tolist()})
 
