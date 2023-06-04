@@ -1,9 +1,13 @@
 import streamlit as st
 import requests
 import pandas as pd
+import os
 
 # API endpoint
-API_URL = 'http://localhost:5000/predict'
+if "API_URL" in os.environ:
+    API_URL = os.environ.get("API_URL")
+else:
+    API_URL = 'http://localhost:5000/predict'
 
 # Streamlit app
 st.title('Titanic Survival Prediction')
@@ -41,5 +45,3 @@ if st.button('Predict'):
 st.header('Passenger Data')
 df = pd.DataFrame(data, index=[0])
 st.table(df)
-
-

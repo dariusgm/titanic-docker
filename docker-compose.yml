@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 services:
   app:
     build:
@@ -6,20 +6,18 @@ services:
       dockerfile: Dockerfile
       target: app
     ports:
-      - 5000:5000
-
+      - 5050:5050
+    environment:
+      API_URL: http://api:5000/predict
     depends_on:
       - api
+
   api:
     build:
       context: .
       target: api
       dockerfile: Dockerfile
+    volumes:
+      - "./data:/app/data"
     ports:
-      - 5050:5050
-
-  train:
-    build:
-      context: .
-      target: train
-      dockerfile: Dockerfile
+      - 5000:5000

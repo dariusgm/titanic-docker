@@ -54,6 +54,6 @@ def predict():
     prediction = model.predict(passenger_data)
     return jsonify({'prediction': prediction.tolist()})
 
-if __name__ == '__main__':
-    app.run()
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')

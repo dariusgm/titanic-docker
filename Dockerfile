@@ -20,6 +20,6 @@ EXPOSE 5000
 CMD ["python", "/app/api.py"]
 
 FROM base AS app
-EXPOSE 5050
 # Run the streamlit frontend app
-CMD ["streamlit", "run", "app.py", "--browser.serverPort", "5050", "--browser.serverAddress", "0.0.0.0"]
+EXPOSE 5050
+CMD ["streamlit", "run", "app.py", "--server.port", "5050", "--browser.serverAddress", "0.0.0.0"]
